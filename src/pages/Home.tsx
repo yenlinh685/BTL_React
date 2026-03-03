@@ -1,17 +1,10 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 const HomePage = () => {
-  const [count, setCount] = useState();
-
-  useEffect(() => {
-    if (count) {
-    }
-  }, []);
-
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1 onClick={() => toast.success("Hello")}>Home Page</h1>
 
       <Link to="/auth">Auth</Link>
     </div>
