@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
 import HomePage from "../../pages/Home";
 import AuthPage from "../../pages/AuthPage";
-import DefaultLayout from "../../layouts/DefaultLayout";
+import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 
 const AppRoutes = () => {
   return (
