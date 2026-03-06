@@ -14,7 +14,7 @@ const Interaction = () => {
       ) : (
         <>
           <Button variant="outline">Đăng nhập</Button>
-          <Button variant="default">Đăng Ký</Button>
+          <Button variant="default">Đăng ký</Button>
         </>
       )}
     </div>
