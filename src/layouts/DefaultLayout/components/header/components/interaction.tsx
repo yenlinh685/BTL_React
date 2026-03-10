@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { useAppSelector } from "~/redux/hooks";
 import { selectCurrentUser } from "~/redux/selectors";
@@ -13,7 +14,9 @@ const Interaction = () => {
         </>
       ) : (
         <>
-          <Button variant="outline">Đăng nhập</Button>
+          <Link to="/auth/login">
+            <Button variant="outline">Đăng nhập</Button>
+          </Link>
           <Button variant="default">Đăng ký</Button>
         </>
       )}

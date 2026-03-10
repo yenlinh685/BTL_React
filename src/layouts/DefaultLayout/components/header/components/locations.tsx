@@ -1,9 +1,9 @@
 import axios from "axios";
 import HeadlessTippy from "huanpenguin-tippy-react/headless";
-import { useEffect, useState } from "react";
-import { Button } from "~/components/ui/button";
 import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "~/components/ui/button";
 
 interface Ward {
   name: string;
@@ -237,7 +237,7 @@ const Location = () => {
         </div>
       )}
     >
-      <div className="cursor-pointer px-4 py-2 bg-primary/40 rounded-2xl">
+      <div className="cursor-pointer px-4 py-2 bg-primary/40 rounded-2xl shrink-0">
         Chọn vị trí
       </div>
     </HeadlessTippy>
