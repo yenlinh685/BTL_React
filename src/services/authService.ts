@@ -15,3 +15,8 @@ export const register = async (email: string, password: string) => {
   });
   return data;
 };
+
+export const logout = async () => {
+  const { data } = await axiosClient.post("/auth/logout");
+  return data;
+};

@@ -237,7 +237,7 @@ const Location = () => {
         </div>
       )}
     >
-      <div className="cursor-pointer px-4 py-2 bg-primary/40 rounded-2xl shrink-0">
+      <div className="cursor-pointer px-4 py-2 bg-primary/40 rounded-2xl shrink-0 hidden sm:block">
         Chọn vị trí
       </div>
     </HeadlessTippy>
