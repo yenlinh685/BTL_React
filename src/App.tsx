@@ -10,7 +10,7 @@ export function App() {
   useEffect(() => {
     const getCurrentUser = async () => {
       const response = await meService.getCurrentUser();
-      dispatch(setCurrentUser(response));
+      dispatch(setCurrentUser(response.data));
     };
     getCurrentUser();
   }, [dispatch]);
