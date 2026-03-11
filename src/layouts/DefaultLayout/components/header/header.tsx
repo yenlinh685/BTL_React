@@ -1,6 +1,6 @@
 import { Input } from "~/components/ui/input";
 import Interaction from "./components/interaction";
-import Location from "./components/locations";
+import Location from "../../../../components/Location/locations";
 import Search from "./components/search";
 import MobileSidebar from "~/components/mobileSidebar/mobileSidebar";
 import { Button } from "~/components/ui/button";

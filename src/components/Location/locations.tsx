@@ -1,9 +1,10 @@
 import axios from "axios";
 import HeadlessTippy from "huanpenguin-tippy-react/headless";
 import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import { sendEvent } from "~/utils/event";
 
 interface Ward {
   name: string;
@@ -30,6 +31,7 @@ interface SelectData {
 }
 
 const Location = () => {
+  const tippyInstanceRef = useRef(null);
   const [location, setLocation] = useState({
     province: "",
     district: "",
@@ -129,6 +131,9 @@ const Location = () => {
       trigger="click"
       interactive
       onHide={handleBack}
+      onShow={(instance: any) => {
+        tippyInstanceRef.current = instance;
+      }}
       render={(attrs) => (
         <div
           className="bg-white p-2 shadow-sm w-100 flex flex-col gap-1 max-h-[calc(100dvh-200px)] overflow-auto "
@@ -234,6 +239,31 @@ const Location = () => {
               </Button>
             </>
           )}
+          <div className="flex items-center gap-2 mt-2">
+            <Button
+              variant={"outline"}
+              className="flex-1"
+              onClick={() => {
+                setLocation({
+                  province: "",
+                  district: "",
+                  ward: "",
+                });
+              }}
+            >
+              Xóa
+            </Button>
+            <Button
+              className="flex-1"
+              onClick={() => {
+                sendEvent("location:apply", location);
+                // @ts-ignore
+                tippyInstanceRef.current?.hide();
+              }}
+            >
+              Áp dụng
+            </Button>
+          </div>
         </div>
       )}
     >
