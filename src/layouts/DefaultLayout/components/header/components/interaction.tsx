@@ -34,7 +34,7 @@ const Interaction = () => {
 
   return (
     <>
-      <div className=" items-center gap-2 hidden sm:flex">
+      <div className=" items-center gap-2 hidden md:flex">
         {currentUser ? (
           <>
             <Button variant="outline">Quản lý tin đăng</Button>

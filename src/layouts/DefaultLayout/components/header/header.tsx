@@ -1,6 +1,7 @@
 import { Input } from "~/components/ui/input";
 import Interaction from "./components/interaction";
 import Location from "./components/locations";
+import Search from "./components/search";
 
 const Header = () => {
   return (
@@ -10,12 +11,7 @@ const Header = () => {
         <Location />
       </div>
 
-      <div className="flex-1 flex justify-center min-w-0 mx-2">
-        <Input
-          className="w-full max-w-125"
-          placeholder="Tìm kiếm bất động sản"
-        />
-      </div>
+      <Search />
 
       <Interaction />
     </div>
