@@ -1,4 +1,6 @@
+import type { CategoryModel } from "./categoryModel";
 import type { MetaPagination } from "./common";
+import type { UserModel } from "./userModel";
 
 export interface PostModel {
   id: number;
@@ -15,8 +17,8 @@ export interface PostModel {
   role: string;
   created_at: string;
   updated_at: string;
-  json_category: unknown | null;
-  json_user: unknown | null;
+  json_category: CategoryModel | null;
+  json_user: UserModel | null;
   json_post_detail: PostDetail;
   is_favorite: boolean;
 }

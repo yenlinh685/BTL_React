@@ -1,8 +1,10 @@
+import type { MetaPagination } from "~/types/common";
 import type { PostModel, SearchPostResponse } from "~/types/postModel";
 import axiosClient from "~/utils/axiosClient";
 
-interface PostResponse {
+export interface PostResponse {
   data: PostModel[];
+  meta: MetaPagination;
 }
 
 export const searchPosts = async (q: string): Promise<SearchPostResponse> => {
@@ -13,5 +15,37 @@ export const searchPosts = async (q: string): Promise<SearchPostResponse> => {
       per_page: 3,
     },
   });
+  return data;
+};
+
+export const getPosts = async ({
+  property_category,
+  min_price,
+  max_price,
+  location,
+}: {
+  property_category?: string;
+  min_price?: number;
+  max_price?: number;
+  location?: string;
+}): Promise<PostResponse> => {
+  const { data } = await axiosClient.get("/posts", {
+    params: {
+      property_category,
+      min_price,
+      max_price,
+      location,
+    },
+  });
+  return data;
+};
+
+export const likePost = async (id: number) => {
+  const { data } = await axiosClient.post(`/posts/${id}/like`);
+  return data;
+};
+
+export const unlikePost = async (id: number) => {
+  const { data } = await axiosClient.delete(`/posts/${id}/unlike`);
   return data;
 };
