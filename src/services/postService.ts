@@ -19,19 +19,19 @@ export const searchPosts = async (q: string): Promise<SearchPostResponse> => {
 };
 
 export const getPosts = async ({
-  property_category,
+  property_categories,
   min_price,
   max_price,
   location,
 }: {
-  property_category?: string;
+  property_categories?: string;
   min_price?: number;
   max_price?: number;
   location?: string;
 }): Promise<PostResponse> => {
   const { data } = await axiosClient.get("/posts", {
     params: {
-      property_category,
+      property_categories,
       min_price,
       max_price,
       location,

@@ -9,14 +9,16 @@ import { listenEvent } from "~/utils/event";
 import type { PostModel } from "~/types/postModel";
 
 const HomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | undefined
+  >();
   const [posts, setPosts] = useState<PostResponse>();
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const response = await getPosts({
-          property_category: selectedCategory,
+          property_categories: selectedCategory,
         });
         setPosts(response);
       } catch (error) {
@@ -57,7 +59,7 @@ const HomePage = () => {
               const fetchPost = async () => {
                 try {
                   const response = await getPosts({
-                    property_category: selectedCategory,
+                    property_categories: selectedCategory,
                   });
                   setPosts((prev: any) => {
                     return {

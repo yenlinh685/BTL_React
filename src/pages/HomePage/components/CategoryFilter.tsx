@@ -4,8 +4,8 @@ import { getCategories } from "~/services/categoryService";
 import type { CategoryModel } from "~/types/categoryModel";
 import { Button } from "~/components/ui/button";
 interface CategoryFiterProps {
-  selectedCategory: string;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+  selectedCategory: string | undefined;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 const CategoryFilter: React.FC<CategoryFiterProps> = ({
   selectedCategory,
@@ -30,8 +30,8 @@ const CategoryFilter: React.FC<CategoryFiterProps> = ({
       <div>
         <h3 className="font-medium mb-4">Mua bán bất động sản giá tốt</h3>
         <Button
-          variant={selectedCategory === "" ? "default" : "secondary"}
-          onClick={() => setSelectedCategory("")}
+          variant={selectedCategory === undefined ? "default" : "secondary"}
+          onClick={() => setSelectedCategory(undefined)}
         >
           Bỏ lọc
         </Button>
@@ -41,9 +41,9 @@ const CategoryFilter: React.FC<CategoryFiterProps> = ({
             className="ml-2"
             key={category.id}
             variant={
-              category.name === selectedCategory ? "default" : "secondary"
+              category.key === selectedCategory ? "default" : "secondary"
             }
-            onClick={() => setSelectedCategory(category.name)}
+            onClick={() => setSelectedCategory(category.key)}
           >
             {category.name}
           </Button>
