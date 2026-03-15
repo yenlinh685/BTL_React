@@ -7,18 +7,38 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PostItem from "~/components/PostItem/PostItem";
 import { listenEvent } from "~/utils/event";
 import type { PostModel } from "~/types/postModel";
+import PriceRangeFilter from "./components/PriceRangeFilter";
 
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<
     string | undefined
   >();
   const [posts, setPosts] = useState<PostResponse>();
-
+  const [priceRange, setPriceRange] = useState<string | null>(null);
+  const [location, setLocation] = useState<{
+    province: string;
+    district: string;
+    ward: string;
+  }>({
+    province: "",
+    district: "",
+    ward: "",
+  });
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        const [minPrice, maxPrice] = priceRange?.split("-") || [
+          undefined,
+          undefined,
+        ];
+
+        const locationArray = Object.values(location).filter(Boolean);
+        console.log(locationArray.reverse().join(", "));
         const response = await getPosts({
           property_categories: selectedCategory,
+          min_price: minPrice,
+          max_price: maxPrice,
+          location: locationArray.reverse().join(", ") || undefined,
         });
         setPosts(response);
       } catch (error) {
@@ -27,7 +47,13 @@ const HomePage = () => {
     };
 
     fetchPost();
-  }, [selectedCategory]);
+  }, [
+    selectedCategory,
+    priceRange,
+    location?.ward,
+    location?.district,
+    location?.province,
+  ]);
   useEffect(() => {
     const remove = listenEvent("post:toggle-like", ({ detail: postId }) => {
       setPosts((prev: any) => {
@@ -44,6 +70,15 @@ const HomePage = () => {
 
     return () => remove();
   }, []);
+
+  useEffect(() => {
+    const remove = listenEvent("location:apply", ({ detail: location }) => {
+      setLocation(location);
+    });
+
+    return () => remove();
+  }, []);
+
   return (
     <div className="py-5 ">
       <CategoryFilter
@@ -51,7 +86,7 @@ const HomePage = () => {
         setSelectedCategory={setSelectedCategory}
       ></CategoryFilter>
       <div className="grid grid-cols-12 gap-3 container xl:max-w-7xl mx-auto mt-5">
-        <Popper className="col-span-12 md:col-span-7 order-2 md:order-1">
+        <Popper className="col-span-12 md:col-span-8 order-2 md:order-1">
           <InfiniteScroll
             className="overflow-y-hidden! grid grid-cols-12 gap-2"
             dataLength={posts?.data.length || 0}
@@ -96,7 +131,9 @@ const HomePage = () => {
             })}
           </InfiniteScroll>
         </Popper>
-        <div className="col-span-12 md:col-span-5 order-1 md:order-2"></div>
+        <div className="col-span-12 md:col-span-4 order-1 md:order-2">
+          <PriceRangeFilter setPriceRange={setPriceRange}></PriceRangeFilter>
+        </div>
       </div>
     </div>
   );

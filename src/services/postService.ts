@@ -25,8 +25,8 @@ export const getPosts = async ({
   location,
 }: {
   property_categories?: string;
-  min_price?: number;
-  max_price?: number;
+  min_price?: string;
+  max_price?: string;
   location?: string;
 }): Promise<PostResponse> => {
   const { data } = await axiosClient.get("/posts", {

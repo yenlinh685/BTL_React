@@ -249,6 +249,11 @@ const Location = () => {
                   district: "",
                   ward: "",
                 });
+                sendEvent("location:apply", {
+                  province: "",
+                  district: "",
+                  ward: "",
+                });
               }}
             >
               Xóa
