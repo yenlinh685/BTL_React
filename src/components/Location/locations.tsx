@@ -55,7 +55,7 @@ const Location = () => {
           });
         }
         break;
-      case "district":
+      case "district": {
         const filePath = selectedLocation.data[location.province].file_path;
 
         const { data: district } = await axios.get(filePath);
@@ -81,6 +81,7 @@ const Location = () => {
           };
         });
         break;
+      }
       case "ward":
         setSelectedLocation((prev) => {
           return {
@@ -127,155 +128,171 @@ const Location = () => {
   };
 
   return (
-    <HeadlessTippy
-      trigger="click"
-      interactive
-      onHide={handleBack}
-      onShow={(instance: any) => {
-        tippyInstanceRef.current = instance;
-      }}
-      render={(attrs) => (
-        <div
-          className="bg-white p-2 shadow-sm w-100 flex flex-col gap-1 max-h-[calc(100dvh-200px)] overflow-auto "
-          {...attrs}
-        >
-          {selectedLocation.type ? (
-            <>
-              <Button variant={"ghost"} size={"icon"} onClick={handleBack}>
-                <ChevronLeft className="size-6" />
-              </Button>
+    <div className="whitespace-nowrap">
+      <HeadlessTippy
+        trigger="click"
+        placement="bottom-start"
+        interactive
+        onHide={handleBack}
+        onShow={(instance: any) => {
+          tippyInstanceRef.current = instance;
+        }}
+        render={(attrs) => (
+          <div
+            className="bg-white p-2 shadow-sm w-100 flex flex-col gap-1 max-h-[calc(100dvh-200px)] overflow-auto "
+            {...attrs}
+          >
+            {selectedLocation.type ? (
+              <>
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  onClick={handleBack}
+                  type="button"
+                >
+                  <ChevronLeft className="size-6" />
+                </Button>
 
-              {(() => {
-                let data: string[] = [];
+                {(() => {
+                  let data: string[] = [];
 
-                switch (selectedLocation.type) {
-                  case "province":
-                    data = Object.keys(selectedLocation.data);
-                    break;
-                  case "district":
-                    {
-                      if (!location.province) {
-                        toast.error("Vui lòng chọn tỉnh/thành phố trước");
-                        return;
+                  switch (selectedLocation.type) {
+                    case "province":
+                      data = Object.keys(selectedLocation.data);
+                      break;
+                    case "district":
+                      {
+                        if (!location.province) {
+                          toast.error("Vui lòng chọn tỉnh/thành phố trước");
+                          return;
+                        }
+
+                        data = selectedLocation?.data[
+                          location.province
+                        ]?.district
+                          ?.map((item: District) => {
+                            return item.pre + " " + item.name;
+                          })
+                          .filter(Boolean) as string[];
+
+                        console.log(data);
                       }
-
-                      data = selectedLocation?.data[location.province]?.district
-                        ?.map((item: District) => {
+                      break;
+                    case "ward":
+                      data = selectedLocation.data[location.province].district
+                        ?.find((dis: District) => {
+                          return dis.pre + " " + dis.name === location.district;
+                        })
+                        ?.ward?.map((item: Ward) => {
                           return item.pre + " " + item.name;
                         })
                         .filter(Boolean) as string[];
 
-                      console.log(data);
-                    }
-                    break;
-                  case "ward":
-                    data = selectedLocation.data[location.province].district
-                      ?.find((dis: District) => {
-                        return dis.pre + " " + dis.name === location.district;
-                      })
-                      ?.ward?.map((item: Ward) => {
-                        return item.pre + " " + item.name;
-                      })
-                      .filter(Boolean) as string[];
+                      break;
+                  }
 
-                    break;
-                }
+                  return data.map((item) => {
+                    return (
+                      <Button
+                        key={item}
+                        variant={"outline"}
+                        className="flex justify-start"
+                        onClick={() => {
+                          handleChoose(selectedLocation.type, item);
+                        }}
+                        type="button"
+                      >
+                        {item}
+                      </Button>
+                    );
+                  });
+                })()}
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={() => handleSelect("province")}
+                  variant="outline"
+                  className="border! border-border! text-left flex justify-start"
+                  type="button"
+                >
+                  Chọn tỉnh/thành phố
+                  {location.province && (
+                    <span className="ml-2 text-sm text-muted-foreground">
+                      ({location.province})
+                    </span>
+                  )}
+                </Button>
 
-                return data.map((item) => {
-                  return (
-                    <Button
-                      key={item}
-                      variant={"outline"}
-                      className="flex justify-start"
-                      onClick={() => {
-                        handleChoose(selectedLocation.type, item);
-                      }}
-                    >
-                      {item}
-                    </Button>
-                  );
-                });
-              })()}
-            </>
-          ) : (
-            <>
+                <Button
+                  onClick={() => handleSelect("district")}
+                  variant="outline"
+                  className="border! border-border! text-left flex justify-start"
+                  type="button"
+                >
+                  Chọn quận/huyện
+                  {location.district && (
+                    <span className="ml-2 text-sm text-muted-foreground">
+                      ({location.district})
+                    </span>
+                  )}
+                </Button>
+
+                <Button
+                  onClick={() => handleSelect("ward")}
+                  variant="outline"
+                  className="border! border-border! text-left flex justify-start"
+                  type="button"
+                >
+                  Chọn xã/phường
+                  {location.ward && (
+                    <span className="ml-2 text-sm text-muted-foreground">
+                      ({location.ward})
+                    </span>
+                  )}
+                </Button>
+              </>
+            )}
+            <div className="flex items-center gap-2 mt-2">
               <Button
-                onClick={() => handleSelect("province")}
-                variant="outline"
-                className="border! border-border! text-left flex justify-start"
+                variant={"outline"}
+                className="flex-1"
+                onClick={() => {
+                  setLocation({
+                    province: "",
+                    district: "",
+                    ward: "",
+                  });
+                  sendEvent("location:apply", {
+                    province: "",
+                    district: "",
+                    ward: "",
+                  });
+                }}
+                type="button"
               >
-                Chọn tỉnh/thành phố
-                {location.province && (
-                  <span className="ml-2 text-sm text-muted-foreground">
-                    ({location.province})
-                  </span>
-                )}
+                Xóa
               </Button>
-
               <Button
-                onClick={() => handleSelect("district")}
-                variant="outline"
-                className="border! border-border! text-left flex justify-start"
+                className="flex-1"
+                onClick={() => {
+                  sendEvent("location:apply", location);
+                  // @ts-expect-error - tippyInstanceRef is typed as any
+                  tippyInstanceRef.current?.hide();
+                }}
+                type="button"
               >
-                Chọn quận/huyện
-                {location.district && (
-                  <span className="ml-2 text-sm text-muted-foreground">
-                    ({location.district})
-                  </span>
-                )}
+                Áp dụng
               </Button>
-
-              <Button
-                onClick={() => handleSelect("ward")}
-                variant="outline"
-                className="border! border-border! text-left flex justify-start"
-              >
-                Chọn xã/phường
-                {location.ward && (
-                  <span className="ml-2 text-sm text-muted-foreground">
-                    ({location.ward})
-                  </span>
-                )}
-              </Button>
-            </>
-          )}
-          <div className="flex items-center gap-2 mt-2">
-            <Button
-              variant={"outline"}
-              className="flex-1"
-              onClick={() => {
-                setLocation({
-                  province: "",
-                  district: "",
-                  ward: "",
-                });
-                sendEvent("location:apply", {
-                  province: "",
-                  district: "",
-                  ward: "",
-                });
-              }}
-            >
-              Xóa
-            </Button>
-            <Button
-              className="flex-1"
-              onClick={() => {
-                sendEvent("location:apply", location);
-                // @ts-ignore
-                tippyInstanceRef.current?.hide();
-              }}
-            >
-              Áp dụng
-            </Button>
+            </div>
           </div>
+        )}
+      >
+        <div className="cursor-pointer px-4 py-2 bg-primary/40 rounded-2xl shrink-0 hidden md:block">
+          Chọn vị trí
         </div>
-      )}
-    >
-      <div className="cursor-pointer px-4 py-2 bg-primary/40 rounded-2xl shrink-0 hidden md:block">
-        Chọn vị trí
-      </div>
-    </HeadlessTippy>
+      </HeadlessTippy>
+    </div>
   );
 };
 

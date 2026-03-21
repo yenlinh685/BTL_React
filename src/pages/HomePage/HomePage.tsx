@@ -33,7 +33,6 @@ const HomePage = () => {
         ];
 
         const locationArray = Object.values(location).filter(Boolean);
-        console.log(locationArray.reverse().join(", "));
         const response = await getPosts({
           property_categories: selectedCategory,
           min_price: minPrice,
@@ -41,7 +40,7 @@ const HomePage = () => {
           location: locationArray.reverse().join(", ") || undefined,
         });
         setPosts(response);
-      } catch (error) {
+      } catch (_) {
         toast.error("Đã có lỗi xảy ra khi lấy danh sách bất động sản");
       }
     };
@@ -50,9 +49,10 @@ const HomePage = () => {
   }, [
     selectedCategory,
     priceRange,
-    location?.ward,
-    location?.district,
-    location?.province,
+    location.ward,
+    location.district,
+    location.province,
+    location,
   ]);
   useEffect(() => {
     const remove = listenEvent("post:toggle-like", ({ detail: postId }) => {
@@ -103,7 +103,7 @@ const HomePage = () => {
                       meta: response.meta,
                     };
                   });
-                } catch (error) {
+                } catch (_) {
                   toast.error(
                     "Đã có lỗi xảy ra khi lấy danh sách bất động sản",
                   );

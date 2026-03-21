@@ -38,7 +38,9 @@ const Interaction = () => {
         {currentUser ? (
           <>
             <Button variant="outline">Quản lý tin đăng</Button>
-            <Button variant="default">Đăng tin</Button>
+            <Link to="/post/create">
+              <Button variant="default">Đăng tin</Button>
+            </Link>
           </>
         ) : (
           <>

@@ -49,3 +49,28 @@ export const unlikePost = async (id: number) => {
   const { data } = await axiosClient.delete(`/posts/${id}/unlike`);
   return data;
 };
+
+export const createPost = async (data: {
+  title: string;
+  description: string;
+  category_id: number;
+  address: string;
+  administrative_address: string;
+  images: string;
+  project_type: "rent" | "sell";
+  role: "user" | "agent";
+  details: {
+    bedrooms: number;
+    bathrooms: number;
+    balcony: string;
+    main_door: string;
+    legal_documents: string;
+    interior_status: string;
+    area: number;
+    price: string;
+    deposit: string;
+  };
+}) => {
+  const { data: response } = await axiosClient.post("/posts", data);
+  return response;
+};

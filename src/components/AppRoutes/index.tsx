@@ -4,6 +4,7 @@ import LoginPage from "../../pages/LoginPage";
 import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 import AuthLayout from "~/layouts/AuthLayout/AuthLayout";
 import RegisterPage from "~/pages/RegisterPage";
+import CreatePostPage from "~/pages/CreatePostPage/CreatePostPage";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
 
       <Route element={<DefaultLayout />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/post/create" element={<CreatePostPage />} />
       </Route>
     </Routes>
   );
