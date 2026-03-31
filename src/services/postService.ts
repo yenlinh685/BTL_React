@@ -23,11 +23,15 @@ export const getPosts = async ({
   min_price,
   max_price,
   location,
+  page,
+  per_page,
 }: {
   property_categories?: string;
   min_price?: string;
   max_price?: string;
   location?: string;
+  page: number;
+  per_page: number;
 }): Promise<PostResponse> => {
   const { data } = await axiosClient.get("/posts", {
     params: {
@@ -35,6 +39,8 @@ export const getPosts = async ({
       min_price,
       max_price,
       location,
+      page,
+      per_page,
     },
   });
   return data;
@@ -73,4 +79,14 @@ export const createPost = async (data: {
 }) => {
   const { data: response } = await axiosClient.post("/posts", data);
   return response;
+};
+
+export const getPostById = async (id: number) => {
+  const { data } = await axiosClient.get(`/posts/${id}`);
+  return data;
+};
+
+export const deletePost = async (id: number) => {
+  const { data } = await axiosClient.delete(`/posts/${id}`);
+  return data;
 };

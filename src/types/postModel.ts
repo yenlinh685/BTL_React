@@ -18,7 +18,7 @@ export interface PostModel {
   created_at: string;
   updated_at: string;
   json_category: CategoryModel | null;
-  json_user: UserModel | null;
+  json_user: (UserModel & { post_count: number }) | null;
   json_post_detail: PostDetail;
   is_favorite: boolean;
 }

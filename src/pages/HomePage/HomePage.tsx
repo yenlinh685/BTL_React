@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import CategoryFilter from "./components/CategoryFilter";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getPosts, type PostResponse } from "~/services/postService";
 import Popper from "~/components/Popper/Popper";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -8,6 +8,8 @@ import PostItem from "~/components/PostItem/PostItem";
 import { listenEvent } from "~/utils/event";
 import type { PostModel } from "~/types/postModel";
 import PriceRangeFilter from "./components/PriceRangeFilter";
+
+const PER_PAGE = 10;
 
 const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState<
@@ -38,6 +40,8 @@ const HomePage = () => {
           min_price: minPrice,
           max_price: maxPrice,
           location: locationArray.reverse().join(", ") || undefined,
+          page: 1,
+          per_page: PER_PAGE,
         });
         setPosts(response);
       } catch (_) {
@@ -95,11 +99,13 @@ const HomePage = () => {
                 try {
                   const response = await getPosts({
                     property_categories: selectedCategory,
+                    page: (posts?.meta.pagination.current_page || 1) + 1,
+                    per_page: PER_PAGE,
                   });
-                  setPosts((prev: any) => {
+                  setPosts((prev: PostResponse | undefined) => {
                     return {
                       ...prev,
-                      data: [...prev.data, ...response.data],
+                      data: [...prev!.data, ...response.data],
                       meta: response.meta,
                     };
                   });
@@ -122,11 +128,12 @@ const HomePage = () => {
           >
             {posts?.data.map((post) => {
               return (
-                <PostItem
-                  key={post.id}
-                  post={post}
-                  className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3"
-                ></PostItem>
+                <React.Fragment key={post.id}>
+                  <PostItem
+                    post={post}
+                    className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3"
+                  ></PostItem>
+                </React.Fragment>
               );
             })}
           </InfiniteScroll>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import HeadlessTippy from "huanpenguin-tippy-react/headless";
 import { ChevronLeft } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { sendEvent } from "~/utils/event";
@@ -43,6 +43,10 @@ const Location = () => {
     data: {},
   });
 
+  useEffect(() => {
+    console.log(selectedLocation);
+  }, [selectedLocation]);
+
   const handleSelect = async (type: "province" | "district" | "ward") => {
     switch (type) {
       case "province":
@@ -62,7 +66,6 @@ const Location = () => {
 
         setSelectedLocation((prev) => {
           return {
-            ...prev,
             type: "district",
             data: {
               ...prev.data,

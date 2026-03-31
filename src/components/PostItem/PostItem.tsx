@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { likePost, unlikePost } from "~/services/postService";
 import { sendEvent } from "~/utils/event";
+import { Link } from "react-router";
 
 interface PostItemProps {
   post: PostModel;
@@ -23,12 +24,12 @@ const PostItem: React.FC<PostItemProps> = ({ post, className }) => {
           break;
       }
       sendEvent("post:toggle-like", post.id);
-    } catch (error) {
+    } catch (_) {
       toast.error(`Lỗi khi ${post.is_favorite ? "unlike" : "like"} bài đăng`);
     }
   };
   return (
-    <div className={cn("relative", className)}>
+    <Link to={`/post/${post.id}`} className={cn("relative", className)}>
       <img
         src={JSON.parse(post.images || "")[0]}
         className="w-full aspect-square rounded-md "
@@ -60,7 +61,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, className }) => {
       >
         {post.is_favorite ? "🌟" : "☆"}
       </Button>
-    </div>
+    </Link>
   );
 };
 

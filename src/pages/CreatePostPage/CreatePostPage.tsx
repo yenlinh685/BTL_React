@@ -150,6 +150,8 @@ const CreatePost = () => {
       });
     });
 
+    console.log(filesWithPreview);
+
     setImages((prev) => [...prev, ...filesWithPreview]);
 
     //cho phép user tải file lên với tên giống nhau
@@ -215,7 +217,7 @@ const CreatePost = () => {
         },
       };
 
-      const response = await createPost(createPostData);
+      await createPost(createPostData);
 
       toast.success("Đăng bài thành công");
       reset();

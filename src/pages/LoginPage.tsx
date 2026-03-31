@@ -20,7 +20,7 @@ const LoginPage = () => {
     try {
       setErrorMessage("");
 
-      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      if (!/^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
         setErrorMessage("Vui lòng nhập email hợp lệ");
         return;
       }
