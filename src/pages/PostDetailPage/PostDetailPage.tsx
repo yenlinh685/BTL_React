@@ -1,14 +1,8 @@
-import {
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Divide,
-  MapPin,
-} from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import moment from "moment-timezone";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
-import moment from "moment-timezone";
 import Popper from "~/components/Popper/Popper";
 import PricePerMeter, {
   calculatePricePerM2,
@@ -16,13 +10,12 @@ import PricePerMeter, {
 import { Button } from "~/components/ui/button";
 import { deletePost, getPostById } from "~/services/postService";
 import type { PostModel } from "~/types/postModel";
-import { useAppSelector } from "~/redux/hooks";
-import { selectCurrentUser } from "~/redux/selectors";
+import useCurrentUser from "~/zustand/useCurrentUser";
 
 const PostDetailPage = () => {
   const navigate = useNavigate();
 
-  const currentUser = useAppSelector(selectCurrentUser);
+  const currentUser = useCurrentUser((state) => state.user);
 
   const { id } = useParams();
   const [post, setPost] = useState<PostModel | null>(null);

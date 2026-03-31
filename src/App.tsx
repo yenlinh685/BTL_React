@@ -1,19 +1,18 @@
 import { useEffect } from "react";
 import AppRoutes from "./components/AppRoutes";
 import * as meService from "./services/meService";
-import { useAppDispatch } from "./redux/hooks";
-import { setCurrentUser } from "./redux/reducers/userSlice";
+import useCurrentUser from "./zustand/useCurrentUser";
 
 export function App() {
-  const dispatch = useAppDispatch();
+  const setUser = useCurrentUser((state) => state.setUser);
 
   useEffect(() => {
     const getCurrentUser = async () => {
       const response = await meService.getCurrentUser();
-      dispatch(setCurrentUser(response.data));
+      setUser(response.data);
     };
     getCurrentUser();
-  }, [dispatch]);
+  }, [setUser]);
 
   return <AppRoutes />;
 }

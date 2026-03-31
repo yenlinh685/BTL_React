@@ -3,12 +3,11 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { useAppDispatch } from "~/redux/hooks";
-import { setCurrentUser } from "~/redux/reducers/userSlice";
 import { login } from "~/services/authService";
+import useCurrentUser from "~/zustand/useCurrentUser";
 
 const LoginPage = () => {
-  const dispatch = useAppDispatch();
+  const setUser = useCurrentUser((state) => state.setUser);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
@@ -32,7 +31,7 @@ const LoginPage = () => {
 
       const response = await login(email, password);
 
-      dispatch(setCurrentUser(response.data));
+      setUser(response.data);
 
       window.location.href = "/";
     } catch (error: any) {

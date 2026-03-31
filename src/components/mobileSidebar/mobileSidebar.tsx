@@ -1,18 +1,16 @@
-import { Divide, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { cn } from "~/lib/utils";
-import { useAppSelector } from "~/redux/hooks";
-import { selectCurrentUser } from "~/redux/selectors";
-import { listenEvent } from "~/utils/event";
-import { Button } from "../ui/button";
 import { Link } from "react-router";
-import { Label } from "radix-ui";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { toast } from "sonner";
+import { cn } from "~/lib/utils";
 import { logout } from "~/services/authService";
+import { listenEvent } from "~/utils/event";
+import useCurrentUser from "~/zustand/useCurrentUser";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 
 const MobileSidebar = () => {
-  const currentUser = useAppSelector(selectCurrentUser);
+  const currentUser = useCurrentUser((state) => state.user);
   const [isOpen, setIsOpen] = useState(false);
   const MENU = [
     { label: "Trang chủ", href: "/", isAuth: false, isAdmin: false },

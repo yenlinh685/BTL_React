@@ -11,12 +11,11 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "~/components/ui/menubar";
-import { useAppSelector } from "~/redux/hooks";
-import { selectCurrentUser } from "~/redux/selectors";
 import { logout } from "~/services/authService";
+import useCurrentUser from "~/zustand/useCurrentUser";
 
 const Interaction = () => {
-  const currentUser = useAppSelector(selectCurrentUser);
+  const currentUser = useCurrentUser((state) => state.user);
 
   const handleLogout = async () => {
     try {
