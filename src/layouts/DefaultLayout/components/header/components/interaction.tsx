@@ -64,7 +64,11 @@ const Interaction = () => {
             </MenubarTrigger>
             <MenubarContent>
               <MenubarGroup>
-                <MenubarItem>Hồ sơ cá nhân</MenubarItem>
+                <MenubarItem asChild>
+                  <Link to={`/user/${currentUser.nickname}`}>
+                    Hồ sơ cá nhân
+                  </Link>
+                </MenubarItem>
                 {currentUser.role === "admin" && (
                   <MenubarItem>Dashboard</MenubarItem>
                 )}

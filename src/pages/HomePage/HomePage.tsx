@@ -97,9 +97,16 @@ const HomePage = () => {
             next={() => {
               const fetchPost = async () => {
                 try {
+                  const [minPrice, maxPrice] = priceRange?.split("-") || [
+                    undefined,
+                    undefined,
+                  ];
+
                   const response = await getPosts({
                     property_categories: selectedCategory,
                     page: (posts?.meta.pagination.current_page || 1) + 1,
+                    min_price: minPrice,
+                    max_price: maxPrice,
                     per_page: PER_PAGE,
                   });
                   setPosts((prev: PostResponse | undefined) => {

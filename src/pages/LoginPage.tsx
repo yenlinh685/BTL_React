@@ -46,7 +46,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <h1 className="mt-12 font-bold text-center text-[#3b8af7]">
         Đăng nhập vào tài khoản của bạn
       </h1>

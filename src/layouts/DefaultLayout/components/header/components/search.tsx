@@ -5,11 +5,12 @@ import { toast } from "sonner";
 import { searchPosts } from "~/services/postService";
 import HeadlessTippy from "huanpenguin-tippy-react/headless";
 import type { PostModel } from "~/types/postModel";
+import { Link } from "react-router";
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState("");
   const [debounceValue] = useDebounce(searchValue, 500);
-
+  const [isVisible, setIsVisible] = useState(false);
   const [searchResult, setSearchResult] = useState<PostModel[]>([]);
 
   useEffect(() => {
@@ -31,13 +32,17 @@ const Search = () => {
   return (
     <div className="flex-1 flex justify-center min-w-0 mx-2">
       <HeadlessTippy
-        visible={searchResult.length > 0}
+        visible={isVisible && searchResult.length > 0}
         render={() => {
           return (
             <div className="bg-white shadow-lg rounded-md p-4 w-full max-w-125">
               {searchResult.length > 0 ? (
                 searchResult.map((post) => (
-                  <div key={post.id} className="py-2 border-b last:border-b-0">
+                  <Link
+                    to={`/post/${post.id}`}
+                    key={post.id}
+                    className="py-2 border-b last:border-b-0"
+                  >
                     <div className="flex items-center gap-1.5">
                       <img
                         src={JSON.parse(post.images)[0]}
@@ -51,7 +56,7 @@ const Search = () => {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 <div className="text-gray-500">Không có kết quả nào</div>
@@ -71,6 +76,7 @@ const Search = () => {
           ],
         }}
         interactive
+        onClickOutside={() => setIsVisible(false)}
       >
         <Input
           className="w-full max-w-125"
@@ -79,6 +85,7 @@ const Search = () => {
           onChange={(e) => {
             setSearchValue(e.target.value);
           }}
+          onFocus={() => setIsVisible(true)}
         />
       </HeadlessTippy>
     </div>

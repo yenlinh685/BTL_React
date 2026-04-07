@@ -11,4 +11,5 @@ export interface UserModel {
   address: string;
   created_at: string;
   updated_at: string;
+  post_count?: number;
 }

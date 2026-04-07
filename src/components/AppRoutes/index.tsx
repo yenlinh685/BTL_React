@@ -6,6 +6,7 @@ import AuthLayout from "~/layouts/AuthLayout/AuthLayout";
 import RegisterPage from "~/pages/RegisterPage";
 import CreatePostPage from "~/pages/CreatePostPage/CreatePostPage";
 import PostDetailPage from "~/pages/PostDetailPage/PostDetailPage";
+import ProfilePage from "~/pages/ProfilePage/ProfilePage";
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/post/create" element={<CreatePostPage />} />
         <Route path="/post/:id" element={<PostDetailPage />} />
+        <Route path="/user/:nickname" element={<ProfilePage />} />
       </Route>
     </Routes>
   );

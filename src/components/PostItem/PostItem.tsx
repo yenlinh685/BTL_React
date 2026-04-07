@@ -13,7 +13,8 @@ interface PostItemProps {
   className?: string;
 }
 const PostItem: React.FC<PostItemProps> = ({ post, className }) => {
-  const handleToggleLike = async () => {
+  const handleToggleLike = async (e: React.MouseEvent) => {
+    e.preventDefault();
     try {
       switch (post.is_favorite) {
         case true:
