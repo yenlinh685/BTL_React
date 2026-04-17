@@ -2,12 +2,9 @@ import { useState } from "react";
 import Popper from "~/components/Popper/Popper";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-interface PriceRangeFilterProps {
-  setPriceRange: React.Dispatch<React.SetStateAction<string | null>>;
-}
-const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
-  setPriceRange,
-}) => {
+import { sendEvent } from "~/utils/event";
+
+const PriceRangeFilter: React.FC = () => {
   const [selectedRange, setSelectedRange] = useState<string | null>(null);
   const range = [
     {
@@ -59,7 +56,7 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
         className="w-full mt-2 flex justify-start font-normal"
         onClick={() => {
           setSelectedRange(null);
-          setPriceRange(null);
+          sendEvent("price-range:select", { value: null });
         }}
       >
         Xóa lọc
@@ -74,7 +71,7 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
           })}
           onClick={() => {
             setSelectedRange(item.label);
-            setPriceRange(item.value);
+            sendEvent("price-range:select", { value: item.value });
           }}
         >
           <p className="text-sm">{item.label}</p>

@@ -31,11 +31,14 @@ const PostItem: React.FC<PostItemProps> = ({ post, className }) => {
   };
   return (
     <Link to={`/post/${post.id}`} className={cn("relative", className)}>
-      <img
-        src={JSON.parse(post.images || "")[0]}
-        className="w-full aspect-square rounded-md "
-        alt=""
-      />
+      {JSON.parse(post.images || "")[0] && (
+        <img
+          src={post.images ? JSON.parse(post.images)[0] : ""}
+          className="w-full aspect-square rounded-md"
+          alt=""
+        />
+      )}
+
       <p className="truncate line-clamp-2 whitespace-pre-wrap h-12 leading-6">
         {post.title}
       </p>

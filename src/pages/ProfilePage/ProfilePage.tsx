@@ -9,8 +9,25 @@ import { Clock, Phone, UploadCloud } from "lucide-react";
 import moment from "moment";
 import { Button } from "~/components/ui/button";
 import useCurrentUser from "~/zustand/useCurrentUser";
+import { is } from "zod/v4/locales";
+import { cn } from "~/lib/utils";
+import PostList from "~/components/postList/postList";
+import { getPosts, type PostResponse } from "~/services/postService";
+import React from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import PostItem from "~/components/PostItem/PostItem";
+import { listenEvent } from "~/utils/event";
+import type { PostModel } from "~/types/postModel";
 
+const tabs = [
+  { type: "approved", label: "Bài viết" },
+  { type: "pending", label: "Đang chờ duyệt", isPrivate: true },
+  { type: "rejected", label: "Bị từ chối", isPrivate: true },
+  { type: "likes", label: "Đã thích", isPrivate: true },
+];
 const ProfilePage = () => {
+  const [posts, setPosts] = useState<PostResponse>();
+  const [currentTab, setCurrentTab] = useState(tabs[0].type);
   const currentUser = useCurrentUser((state) => state.user);
 
   const { nickname } = useParams();
@@ -27,6 +44,40 @@ const ProfilePage = () => {
     };
     getUser();
   }, [nickname]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await getPosts({
+          user_id: user?.id,
+          page: 1,
+          per_page: 10,
+          type: currentTab as "approved" | "pending" | "rejected",
+        });
+        setPosts(response);
+      } catch (_) {
+        toast.error("Failed to load posts");
+      }
+    };
+    fetchPosts();
+  }, [user, currentTab]);
+
+  useEffect(() => {
+    const remove = listenEvent("post:toggle-like", ({ detail: postId }) => {
+      setPosts((prev: any) => {
+        return {
+          ...prev,
+          data: prev?.data.map((post: PostModel) =>
+            post.id === postId
+              ? { ...post, is_favorite: !post.is_favorite }
+              : post,
+          ),
+        };
+      });
+    });
+
+    return () => remove();
+  }, []);
 
   return (
     <div className="grid grid-cols-12 container mx-auto xl:max-w-7xl gap-4 mt-6">
@@ -69,7 +120,77 @@ const ProfilePage = () => {
           )}
         </Popper>
       </div>
-      <div className="md:col-span-8 lg:col-span-9 col-span-12">Right</div>
+      <div className="md:col-span-8 lg:col-span-9 col-span-12">
+        <div className="flex p-1 rounded-lg bg-gray-100">
+          {tabs.map((tab) => {
+            return (
+              <Button
+                variant={"outline"}
+                className={cn("flex-1 bg-transparent hover:bg-transparent", {
+                  hidden: tab.isPrivate && currentUser?.id !== user?.id,
+                  "bg-white hover:bg-white": tab.type === currentTab,
+                })}
+                key={tab.type}
+                onClick={() => {
+                  setCurrentTab(tab.type);
+                }}
+              >
+                {tab.label}
+              </Button>
+            );
+          })}
+        </div>
+        <div className="mt-2">
+          <InfiniteScroll
+            className="overflow-y-hidden! grid grid-cols-12 gap-2"
+            dataLength={posts?.data.length || 0}
+            next={() => {
+              const fetchPost = async () => {
+                try {
+                  const response = await getPosts({
+                    page: (posts?.meta.pagination.current_page || 1) + 1,
+
+                    per_page: 15,
+                    user_id: user?.id,
+                    type: currentTab as "approved" | "pending" | "rejected",
+                  });
+                  setPosts((prev: PostResponse | undefined) => {
+                    return {
+                      ...prev,
+                      data: [...prev!.data, ...response.data],
+                      meta: response.meta,
+                    };
+                  });
+                } catch (_) {
+                  toast.error(
+                    "Đã có lỗi xảy ra khi lấy danh sách bất động sản",
+                  );
+                }
+              };
+
+              fetchPost();
+            }}
+            hasMore={
+              posts?.meta.pagination
+                ? posts?.meta.pagination.current_page <
+                  posts?.meta.pagination.total_pages
+                : false
+            }
+            loader={<></>}
+          >
+            {posts?.data.map((post) => {
+              return (
+                <React.Fragment key={post.id}>
+                  <PostItem
+                    post={post}
+                    className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3"
+                  ></PostItem>
+                </React.Fragment>
+              );
+            })}
+          </InfiniteScroll>
+        </div>
+      </div>
     </div>
   );
 };

@@ -25,13 +25,17 @@ export const getPosts = async ({
   location,
   page,
   per_page,
+  user_id,
+  type,
 }: {
   property_categories?: string;
   min_price?: string;
   max_price?: string;
   location?: string;
+  user_id?: number;
   page: number;
   per_page: number;
+  type?: "approved" | "pending" | "rejected";
 }): Promise<PostResponse> => {
   const { data } = await axiosClient.get("/posts", {
     params: {
@@ -39,8 +43,10 @@ export const getPosts = async ({
       min_price,
       max_price,
       location,
+      user_id,
       page,
       per_page,
+      type,
     },
   });
   return data;

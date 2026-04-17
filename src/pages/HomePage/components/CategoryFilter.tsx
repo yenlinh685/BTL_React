@@ -1,17 +1,19 @@
 import Popper from "~/components/Popper/Popper";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCategories } from "~/services/categoryService";
 import type { CategoryModel } from "~/types/categoryModel";
 import { Button } from "~/components/ui/button";
-interface CategoryFiterProps {
-  selectedCategory: string | undefined;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string | undefined>>;
-}
-const CategoryFilter: React.FC<CategoryFiterProps> = ({
-  selectedCategory,
-  setSelectedCategory,
-}) => {
+import { sendEvent } from "~/utils/event";
+
+const CategoryFilter: React.FC = () => {
   const [categories, setCategories] = useState<CategoryModel[]>([]);
+
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | undefined
+  >();
+  useEffect(() => {
+    sendEvent("categoryChanged", selectedCategory);
+  }, [selectedCategory]);
 
   useEffect(() => {
     const fetchCategories = async () => {
