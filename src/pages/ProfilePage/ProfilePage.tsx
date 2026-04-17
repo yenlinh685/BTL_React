@@ -23,7 +23,7 @@ const tabs = [
   { type: "approved", label: "Bài viết" },
   { type: "pending", label: "Đang chờ duyệt", isPrivate: true },
   { type: "rejected", label: "Bị từ chối", isPrivate: true },
-  { type: "likes", label: "Đã thích", isPrivate: true },
+  { type: "liked", label: "Đã thích", isPrivate: true },
 ];
 const ProfilePage = () => {
   const [posts, setPosts] = useState<PostResponse>();
@@ -49,7 +49,7 @@ const ProfilePage = () => {
     const fetchPosts = async () => {
       try {
         const response = await getPosts({
-          user_id: user?.id,
+          user_id: currentTab === "liked" ? undefined : user?.id,
           page: 1,
           per_page: 10,
           type: currentTab as "approved" | "pending" | "rejected",
@@ -151,7 +151,7 @@ const ProfilePage = () => {
                     page: (posts?.meta.pagination.current_page || 1) + 1,
 
                     per_page: 15,
-                    user_id: user?.id,
+                    user_id: currentTab === "liked" ? undefined : user?.id,
                     type: currentTab as "approved" | "pending" | "rejected",
                   });
                   setPosts((prev: PostResponse | undefined) => {
