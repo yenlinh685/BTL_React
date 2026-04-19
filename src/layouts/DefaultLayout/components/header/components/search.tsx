@@ -43,7 +43,7 @@ const Search = () => {
                     key={post.id}
                     className="py-2 border-b last:border-b-0"
                   >
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 mt-2">
                       <img
                         src={JSON.parse(post.images)[0]}
                         className="w-12 h-12 object-cover rounded-md"

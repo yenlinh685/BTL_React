@@ -1,23 +1,29 @@
-import { useParams } from "react-router";
-import Popper from "~/components/Popper/Popper";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import type { UserModel } from "~/types/userModel";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { getUserByNickname } from "~/services/userService";
 import { Clock, Phone, UploadCloud } from "lucide-react";
 import moment from "moment";
-import { Button } from "~/components/ui/button";
-import useCurrentUser from "~/zustand/useCurrentUser";
-import { is } from "zod/v4/locales";
-import { cn } from "~/lib/utils";
-import PostList from "~/components/postList/postList";
-import { getPosts, type PostResponse } from "~/services/postService";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useParams } from "react-router";
+import { toast } from "sonner";
+import Popper from "~/components/Popper/Popper";
 import PostItem from "~/components/PostItem/PostItem";
-import { listenEvent } from "~/utils/event";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
+import { getPosts, type PostResponse } from "~/services/postService";
+import { getUserByNickname } from "~/services/userService";
 import type { PostModel } from "~/types/postModel";
+import type { UserModel } from "~/types/userModel";
+import { listenEvent } from "~/utils/event";
+import useCurrentUser from "~/zustand/useCurrentUser";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+import EditProfile from "./EditProfile";
 
 const tabs = [
   { type: "approved", label: "Bài viết" },
@@ -26,6 +32,7 @@ const tabs = [
   { type: "liked", label: "Đã thích", isPrivate: true },
 ];
 const ProfilePage = () => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [posts, setPosts] = useState<PostResponse>();
   const [currentTab, setCurrentTab] = useState(tabs[0].type);
   const currentUser = useCurrentUser((state) => state.user);
@@ -84,20 +91,36 @@ const ProfilePage = () => {
       <div className="md:col-span-4 lg:col-span-3 col-span-12">
         <Popper className="p-8">
           <Avatar className="shrink-0 w-30 h-30 mx-auto">
-            <AvatarImage src={user?.avatar || ""} alt="@shadcn" />
+            <AvatarImage
+              src={
+                user?.id === currentUser?.id
+                  ? currentUser?.avatar || ""
+                  : user?.avatar || ""
+              }
+              alt="@shadcn"
+            />
             <AvatarFallback>VN</AvatarFallback>
           </Avatar>
 
           <p className="text-center font-bold text-lg mt-4">
-            {user?.full_name}
+            {user?.id === currentUser?.id
+              ? currentUser?.full_name
+              : user?.full_name}
           </p>
 
-          <p className="text-center text-gray-500 text-sm">{user?.nickname}</p>
+          <p className="text-center text-gray-500 text-sm">
+            {user?.id === currentUser?.id
+              ? currentUser?.nickname
+              : user?.nickname}
+          </p>
 
           <div className="mt-3 flex flex-col gap-1">
             <p className="flex items-center text-sm gap-2 ">
               {" "}
-              <Phone className="size-4" /> {user?.phone_number}
+              <Phone className="size-4" />{" "}
+              {user?.id === currentUser?.id
+                ? currentUser?.phone_number
+                : user?.phone_number}
             </p>
             <p className="flex items-center text-sm gap-2 ">
               <Clock className="size-4" /> Tham gia từ{" "}
@@ -114,9 +137,14 @@ const ProfilePage = () => {
           </div>
 
           {currentUser?.id === user?.id && (
-            <Button variant={"secondary"} className="w-full mt-4">
-              Chỉnh sửa hồ sơ
-            </Button>
+            <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+              <DialogTrigger asChild>
+                <Button variant={"secondary"} className="w-full mt-4">
+                  Chỉnh sửa hồ sơ
+                </Button>
+              </DialogTrigger>
+              <EditProfile setIsEditOpen={setIsEditOpen} />
+            </Dialog>
           )}
         </Popper>
       </div>
