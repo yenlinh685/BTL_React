@@ -27,6 +27,8 @@ export const getPosts = async ({
   per_page,
   user_id,
   type,
+  q,
+  project_type,
 }: {
   property_categories?: string;
   min_price?: string;
@@ -35,7 +37,9 @@ export const getPosts = async ({
   user_id?: number;
   page: number;
   per_page: number;
-  type?: "approved" | "pending" | "rejected";
+  type?: "approved" | "pending" | "rejected" | "";
+  q?: string;
+  project_type?: "sell" | "rent" | "";
 }): Promise<PostResponse> => {
   const { data } = await axiosClient.get("/posts", {
     params: {
@@ -47,7 +51,19 @@ export const getPosts = async ({
       page,
       per_page,
       type,
+      q,
+      project_type,
     },
+  });
+  return data;
+};
+
+export const modifyPostStatus = async (
+  id: number,
+  status: "approved" | "pending" | "rejected"
+) => {
+  const { data } = await axiosClient.patch(`/posts/${id}/status/modify`, {
+    status,
   });
   return data;
 };

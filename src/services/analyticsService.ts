@@ -4,10 +4,12 @@ export interface OverviewData {
   total_post: number;
   approved_posts: number;
   pending_posts: number;
+  rejected_posts: number;
   users: number;
   total_posts_growth_percent: number;
   approved_posts_growth_percent: number;
   pending_posts_growth_percent: number;
+  rejected_posts_growth_percent: number;
   users_growth_percent: number;
 }
 

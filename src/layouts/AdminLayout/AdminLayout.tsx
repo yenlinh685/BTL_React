@@ -90,7 +90,7 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 ml-0 md:ml-[220px] px-4 md:px-8 pt-[18px] md:pt-7 pb-8 md:pb-10 min-h-screen">
+      <main className="flex-1 w-full min-w-0 ml-0 md:ml-[220px] px-4 md:px-8 pt-[18px] md:pt-7 pb-8 md:pb-10 min-h-screen">
         {/* Mobile header */}
         <button
           className="md:hidden inline-flex bg-white border border-gray-200 rounded-lg px-2.5 py-2 text-gray-600 mb-4 cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-all"
