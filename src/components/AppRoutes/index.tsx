@@ -3,10 +3,12 @@ import HomePage from "../../pages/HomePage/HomePage";
 import LoginPage from "../../pages/LoginPage";
 import DefaultLayout from "../../layouts/DefaultLayout/DefaultLayout";
 import AuthLayout from "~/layouts/AuthLayout/AuthLayout";
+import AdminLayout from "~/layouts/AdminLayout/AdminLayout";
 import RegisterPage from "~/pages/RegisterPage";
 import CreatePostPage from "~/pages/CreatePostPage/CreatePostPage";
 import PostDetailPage from "~/pages/PostDetailPage/PostDetailPage";
 import ProfilePage from "~/pages/ProfilePage/ProfilePage";
+import DashboardPage from "~/pages/DashboardPage/DashboardPage";
 
 const AppRoutes = () => {
   return (
@@ -14,6 +16,10 @@ const AppRoutes = () => {
       <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
+      </Route>
+
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<DashboardPage />} />
       </Route>
 
       <Route element={<DefaultLayout />}>

@@ -1,4 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Camera } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   DialogClose,
@@ -11,14 +17,8 @@ import {
 import { Field, FieldError, FieldGroup } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import useCurrentUser from "~/zustand/useCurrentUser";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Camera, UploadCloud } from "lucide-react";
 import { updateProfile } from "~/services/userService";
+import useCurrentUser from "~/zustand/useCurrentUser";
 
 const editProfileSchema = z.object({
   full_name: z.string().min(1, "Tên không được để trống"),
@@ -111,7 +111,9 @@ const EditProfile = ({ setIsEditOpen }: EditProfileProp) => {
 
   useEffect(() => {
     return () => {
-      avatar?.preview && URL.revokeObjectURL(avatar.preview);
+      if (avatar?.preview) {
+        URL.revokeObjectURL(avatar.preview);
+      }
     };
   }, [avatar]);
 

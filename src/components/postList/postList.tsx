@@ -70,14 +70,8 @@ const PostList = () => {
     };
 
     fetchPost();
-  }, [
-    selectedCategory,
-    priceRange,
-    location.ward,
-    location.district,
-    location.province,
-    location,
-  ]);
+  }, [location, priceRange, selectedCategory]);
+
   useEffect(() => {
     const remove = listenEvent("post:toggle-like", ({ detail: postId }) => {
       setPosts((prev: any) => {

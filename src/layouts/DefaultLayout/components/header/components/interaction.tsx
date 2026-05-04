@@ -70,7 +70,9 @@ const Interaction = () => {
                   </Link>
                 </MenubarItem>
                 {currentUser.role === "admin" && (
-                  <MenubarItem>Dashboard</MenubarItem>
+                  <MenubarItem asChild>
+                    <Link to="/admin">Dashboard</Link>
+                  </MenubarItem>
                 )}
               </MenubarGroup>
               <MenubarSeparator />
