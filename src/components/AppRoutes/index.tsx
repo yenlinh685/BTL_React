@@ -11,6 +11,7 @@ import ProfilePage from "~/pages/ProfilePage/ProfilePage";
 import DashboardPage from "~/pages/DashboardPage/DashboardPage";
 
 import AdminPostPage from "~/pages/AdminPostPage/AdminPostPage";
+import AdminContractPage from "~/pages/AdminContractPage/AdminContractPage";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashboardPage />} />
         <Route path="posts" element={<AdminPostPage />} />
+        <Route path="contracts" element={<AdminContractPage />} />
       </Route>
 
       <Route element={<DefaultLayout />}>
